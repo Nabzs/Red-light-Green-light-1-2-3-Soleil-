@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <canvas id="dessin" width="500px" height="300px" style="background: black"></canvas>
+
+    <button id="pause">1 2 3 soleil</button>
+    <button id="play">Play again</button>
+
+    <script>
+        var canvas  = document.getElementById("dessin");
+        var context = canvas.getContext("2d");
+
+        var pause = document.getElementById("pause");
+        var play  = document.getElementById("play");
+
+        const RAYON = 20;
+
+        var balleX = 50;
+        var etat = false;
+
+        play.addEventListener ("click", demarrer);
+        pause.addEventListener("click", stop);
+
+        setInterval(go, 10);
+
+        function go()
+        {
+            if(etat == false || balleX == canvas.width - RAYON) return;
+            
+            context.fillStyle = "black";
+            context.beginPath();
+            context.arc(balleX, 50, RAYON + 2, 0, 2*Math.PI, true);
+            context.closePath();
+            context.fill();
+
+            context.beginPath();
+            context.arc(balleX, canvas.height - 50, RAYON + 2, 0, 2*Math.PI, true);
+            context.closePath();
+            context.fill();
+
+            balleX += 5;
+
+            context.fillStyle = "red";
+            context.beginPath();
+            context.arc(balleX, 50, RAYON, 0, 2*Math.PI, true);
+            context.closePath();
+            context.fill();
+
+            context.fillStyle = "#CCCCCC";
+            context.beginPath();
+            context.arc(balleX, canvas.height - 50, RAYON, 0, 2*Math.PI, true);
+            context.closePath();
+            context.fill();
+        }
+
+        function demarrer()
+        {
+            context.fillStyle = "black";
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            etat = false;
+            balleX = 50;
+
+            context.fillStyle = "pink";
+            context.beginPath();
+            context.moveTo(canvas.width - 50, (canvas.height / 2) + 50 );
+            context.lineTo(canvas.width     ,  canvas.height / 2);
+            context.lineTo(canvas.width - 50, (canvas.height / 2) - 50);
+            context.closePath();
+            context.fill();
+
+            context.fillStyle = "red";
+            context.beginPath();
+            context.arc(balleX, 50, RAYON, 0, 2*Math.PI, true);
+            context.closePath();
+            context.fill();
+
+            context.fillStyle = "#CCCCCC";
+            context.beginPath();
+            context.arc(balleX, canvas.height - 50, RAYON, 0, 2*Math.PI, true);
+            context.closePath();
+            context.fill();
+        }
+
+        function stop()
+        {
+            if(etat == true) 
+            {
+                etat = false;
+                context.strokeStyle = "red";
+                context.font = "30px Arial";
+                context.strokeText("1 2 3 soleil !", canvas.width / 2, canvas.height / 2);
+            }
+            else
+            {
+                etat = true;
+                context.strokeStyle = "green";
+                context.font = "30px Arial";
+                context.strokeText("1 2 3 soleil !", canvas.width / 2, canvas.height / 2);
+            }            
+                
+        }
+
+
+    </script>
+</body>
+</html> 

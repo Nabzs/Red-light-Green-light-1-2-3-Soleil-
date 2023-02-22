@@ -1,0 +1,122 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<title>Ex2</title>    
+<style type='text/css'>
+</style>
+</head>
+<body>
+<h1> Animation dans les canvas </h1>
+<canvas id="dessin" width="600px" height="600px" style="background:#000000">
+</canvas>
+<script>
+// le canvas et son contexte doivent etre declares 
+// en variables globales
+var canvas, context;
+var x,y;
+var balle1Y=10;
+var balle1X=200;
+var balle2Y=200;
+var balle2X=20;
+var sensY=+1;
+var sensX=+1;
+
+const RAYON=20;
+const LARGEUR=100;
+const HAUTEUR=20;
+    
+// connexion JS -> canvas
+canvas=document.getElementById("dessin");
+// ouverture du contexte
+context = canvas.getContext("2d");
+canvas.addEventListener("click",activerJeu);
+
+    function activerJeu()
+    {
+    x=canvas.width/2 - LARGEUR/2;
+    y=canvas.height - HAUTEUR;
+    context.fillStyle = "#666666"; 
+    context.fillRect(x,y,LARGEUR,HAUTEUR);
+    window.addEventListener("keydown",deplacerRaquette,false);
+    // attention a supprimer la detection d'evenement click
+    context.fillStyle = "#16A6DB";
+    context.beginPath();
+    context.arc(balle1X, balle1Y, RAYON, 0, Math.PI*2, true);
+    context.closePath();
+    context.fill();
+    context.fillStyle = "red";
+    context.beginPath();
+    context.arc(balle2X, balle2Y, RAYON, 0, Math.PI*2, true);
+    context.closePath();
+    context.fill();
+    // on arrête d'écouter le click
+    canvas.removeEventListener("click",activerJeu,false);
+  
+    setInterval(deplacerBalle,10);
+    }
+    
+    function deplacerRaquette(evt)
+    {
+    // Appui sur fleche droite et blocage au bord
+    if (evt.key=="ArrowRight" && (x<(canvas.width-LARGEUR))) 
+        {
+        context.fillStyle = "#000000"; 
+        context.fillRect(x,y,LARGEUR,HAUTEUR); 
+        x+=10;
+        context.fillStyle = "#666666"; 
+        context.fillRect(x,y,LARGEUR,HAUTEUR);
+        }
+    // Appui sur fleche gauche avec blocage au bord
+    if (evt.key=="ArrowLeft" && x>0) 
+        {
+        context.fillStyle = "#000000"; 
+        context.fillRect(x,y,LARGEUR,HAUTEUR); 
+        x-=10;
+        context.fillStyle = "#666666"; 
+        context.fillRect(x,y,LARGEUR,HAUTEUR);
+        } 
+    }
+    
+    function deplacerBalle()
+    {
+    // effacer la balle 1
+    context.fillStyle = "#000000";
+    context.beginPath();
+    context.arc(balle1X, balle1Y, RAYON+1, 0, Math.PI*2, true);
+    context.closePath();
+    context.fill();
+    // effacer la balle 2
+    context.fillStyle = "#000000";
+    context.beginPath();
+    context.arc(balle2X, balle2Y, RAYON+1, 0, Math.PI*2, true);
+    context.closePath();
+    context.fill();
+    // conditions de rebonds
+    if (balle2X<RAYON) sensX=+1;
+    if (balle2X>(canvas.width-RAYON)) sensX=-1;
+    console.log(sensX);
+    balle2X=balle2X+sensX*5;
+    
+    // dessiner la balle plus loin
+    if (balle1Y<RAYON) sensY=+1;
+    if (balle1Y>(canvas.height-RAYON)) sensY=-1;
+    balle1Y=balle1Y+sensY*5;
+    context.fillStyle = "#FFFF00";
+    context.beginPath();
+    context.arc(balle1X, balle1Y, RAYON, 0, Math.PI*2, true);
+    context.closePath();
+    context.fill();
+    context.fillStyle = "red";
+    context.beginPath();
+    context.arc(balle2X, balle2Y, RAYON, 0, Math.PI*2, true);
+    context.closePath();
+    context.fill();
+    }
+    
+    
+    </script>
+</body>
+</html>
+
+
+
